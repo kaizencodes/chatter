@@ -1,0 +1,16 @@
+require: rubocop-rails
+
+AllCops:
+  NewCops: enable
+  SuggestExtensions: false
+  Exclude:
+  - "vendor/**/*"
+  - "**/tmp/**/*"
+  - "**/db/schema.rb"
+  - "**/bin/**/*"
+Style/Documentation:
+  Description: Document classes and non-namespace modules.
+  Enabled: false
+Metrics/BlockLength:
+  Exclude:
+  - "config/**/*"
