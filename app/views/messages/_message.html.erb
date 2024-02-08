@@ -4,6 +4,12 @@
     <%= message.content %>
   </p>
 
+    <p>
+    <strong>Posted:</strong>
+    <%= time_tag message.created_at, "data-local": "time-ago" %>
+  </p>
+
+
   <p>
     <strong>User:</strong>
     <%= message.user.email %>
