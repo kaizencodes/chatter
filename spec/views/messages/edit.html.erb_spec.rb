@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'messages/edit', type: :view do
   let(:room) { create(:room, name: 'Room 1') }
-  let(:message) { create(:message, room: room, content: 'Hello, world!') }
+  let(:message) { create(:message, room:, content: 'Hello, world!') }
 
   before(:each) do
     assign(:room, room)

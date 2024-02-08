@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # spec/views/rooms_show_spec.rb
 require 'rails_helper'
 
