@@ -24,5 +24,14 @@ RSpec.describe UserMailer, type: :mailer do
       expect(mail.body.encoded).to include('2 messages have been exchanged in the last week.')
       expect(mail.body.encoded).to include('1 since your last message on the 1st of February.')
     end
+
+    context 'when the user has not created any messages' do
+      let(:mail) { UserMailer.weekly_summary(create(:user)) }
+
+      it 'renders the body' do
+        expect(mail.body.encoded).to include('2 messages have been exchanged in the last week.')
+        expect(mail.body.encoded).to include('0 since your last message on the 1st of February.')
+      end
+    end
   end
 end

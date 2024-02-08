@@ -16,6 +16,8 @@ class UserMailer < ApplicationMailer
   end
 
   def since_last_message_count(user)
+    return 0 if user.messages.empty?
+
     last_message_timestamp = user.messages.last.created_at
     Message.where('created_at > ?', last_message_timestamp).count
   end
