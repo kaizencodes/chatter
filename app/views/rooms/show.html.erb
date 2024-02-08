@@ -1,0 +1,17 @@
+<%= turbo_stream_from @room %>
+
+<p style="color: green"><%= notice %></p>
+
+<div id="<%= dom_id @room %>">
+
+  <p>
+    <strong>Name:</strong>
+    <%= @room.name %>
+  </p>
+
+  <div id="messages">
+    <%= render @room.messages %>
+  </div>
+
+  <%= render "messages/form", message: Message.new(room: @room)  %>
+</div>

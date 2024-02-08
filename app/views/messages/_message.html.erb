@@ -1,0 +1,21 @@
+<div id="<%= dom_id message %>">
+  <p>
+    <strong>Content:</strong>
+    <%= message.content %>
+  </p>
+
+    <p>
+    <strong>Posted:</strong>
+    <%= time_tag message.created_at, "data-local": "time-ago" %>
+  </p>
+
+
+  <p>
+    <strong>User:</strong>
+    <%= message.user.email %>
+  </p>
+
+  <%= link_to "Edit this message", edit_room_message_path(message.room, message) %> |
+  <%= button_to "Destroy this message", room_message_path(message.room, message), method: :delete %>
+
+</div>
