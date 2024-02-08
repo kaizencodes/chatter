@@ -1,0 +1,15 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Messages</h1>
+
+<div id="messages">
+  <% @messages.each do |message| %>
+    <%= render message %>
+    <p>
+      <%= link_to "Edit this message", edit_message_path(message) %> |
+      <%= button_to "Destroy this message", message, method: :delete %>
+    </p>
+  <% end %>
+</div>
+
+<%= render "form", message: Message.new(user: current_user) %>
