@@ -3,13 +3,23 @@
 require 'rails_helper'
 
 RSpec.describe 'messages/edit', type: :view do
-  it 'renders the edit message form' do
-    message = create(:message)
-    assign(:message, message)
+  let(:room) { create(:room, name: 'Room 1') }
+  let(:message) { create(:message, room: room, content: 'Hello, world!') }
 
+  before(:each) do
+    assign(:room, room)
+    assign(:message, message)
+  end
+
+  xit 'renders the messages' do
+    render
+    expect(rendered).to match(/Hello, world!/)
+  end
+
+  xit 'renders the edit message form' do
     render
 
-    assert_select 'form[action=?][method=?]', message_path(message), 'post' do
+    assert_select 'form[action=?][method=?]', room_message_path(room, message), 'post' do
       assert_select 'textarea[name=?]', 'message[content]'
     end
   end

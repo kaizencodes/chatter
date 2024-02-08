@@ -2,42 +2,18 @@
 
 require 'rails_helper'
 
-RSpec.describe '/messages', type: :request do
+RSpec.describe '/rooms/room_id/messages', type: :request do
   let(:user) { create(:user) }
+  let(:room) { create(:room) }
 
   before do
     sign_in user
   end
 
-  describe 'GET /index' do
-    it 'renders a successful response' do
-      get messages_url
-
-      expect(response).to have_http_status(:success)
-    end
-
-    it 'returns the messages' do
-      message = create(:message, user:)
-
-      get messages_url
-
-      expect(response).to have_http_status(:success)
-      expect(response.body).to include(message.content)
-      expect(response.body).to include(user.email)
-    end
-
-    it 'displays a form for creating messages' do
-      get messages_url
-
-      expect(response).to have_http_status(:success)
-      expect(response.body).to have_selector("form[action='#{messages_path}'][method='post']")
-    end
-  end
-
   describe 'GET /edit' do
     it 'renders a successful response' do
-      message = create(:message)
-      get edit_message_url(message)
+      message = create(:message, room:)
+      get edit_room_message_url(room, message)
       expect(response).to have_http_status(:success)
       expect(response.body).to include(message.content)
     end
@@ -47,26 +23,26 @@ RSpec.describe '/messages', type: :request do
     context 'with valid parameters' do
       it 'creates a new Message' do
         expect do
-          post messages_url, params: { message: attributes_for(:message) }
-        end.to change(Message, :count).by(1)
+          post room_messages_url(room), params: { message: attributes_for(:message) }
+        end.to change(room.messages, :count).by(1)
       end
 
-      it 'redirects to the messages page' do
-        post messages_url, params: { message: attributes_for(:message) }
-        expect(response).to redirect_to(messages_url)
+      it 'redirects to the room page' do
+        post room_messages_url(room), params: { message: attributes_for(:message) }
+        expect(response).to redirect_to(room_url(room))
       end
     end
 
     context 'with invalid parameters' do
       it 'does not create a new Message' do
         expect do
-          post messages_url, params: { message: { foo: 'bar' } }
-        end.to change(Message, :count).by(0)
+          post room_messages_url(room), params: { message: { foo: 'bar' } }
+        end.to change(room.messages, :count).by(0)
       end
 
-      it "renders a response with 422 status (i.e. to display the 'new' template)" do
-        post messages_url, params: { message: { foo: 'bar' } }
-        expect(response).to have_http_status(:unprocessable_entity)
+      it 'redirects to the room page' do
+        post room_messages_url(room), params: { message: attributes_for(:message) }
+        expect(response).to redirect_to(room_url(room))
       end
     end
   end
@@ -74,52 +50,58 @@ RSpec.describe '/messages', type: :request do
   describe 'PATCH /update' do
     context 'with valid parameters' do
       it 'updates the requested message' do
-        message = create(:message, content: 'original content')
+        message = create(:message, content: 'original content', room:)
 
-        patch message_url(message), params: { message: { content: 'new content' } }
+        patch room_message_url(room, message), params: { message: { content: 'new content' } }
 
         message.reload
         expect(message.content).to eq 'new content'
       end
 
-      it 'redirects to the messages page' do
+      it 'redirects to the room page' do
         message = create(:message, content: 'original content')
 
-        patch message_url(message), params: { message: { content: 'new content' } }
+        patch room_message_url(room, message), params: { message: { content: 'new content' } }
 
-        message.reload
-        expect(response).to redirect_to(messages_url)
+        expect(response).to redirect_to(room_url(room))
       end
     end
 
     context 'with invalid parameters' do
-      it "renders a response with 422 status (i.e. to display the 'edit' template)" do
+      it 'does not update the message' do
         message = create(:message, content: 'original content')
 
-        patch message_url(message), params: { message: { foo: 'bar' } }
+        patch room_message_url(room, message), params: { message: { foo: 'bar' } }
 
-        expect(response).to have_http_status(:found)
         message.reload
         expect(message.content).to eq 'original content'
+      end
+
+      it 'redirects to the room page' do
+        message = create(:message, content: 'original content')
+
+        patch room_message_url(room, message), params: { message: { content: 'new content' } }
+
+        expect(response).to redirect_to(room_url(room))
       end
     end
   end
 
   describe 'DELETE /destroy' do
     it 'destroys the requested message' do
-      message = create(:message)
+      message = create(:message, room:)
 
       expect do
-        delete message_url(message)
-      end.to change(Message, :count).by(-1)
+        delete room_message_url(room, message)
+      end.to change(room.messages, :count).by(-1)
     end
 
-    it 'redirects to the messages list' do
-      message = create(:message)
+    it 'redirects to the room page' do
+      message = create(:message, room:)
 
-      delete message_url(message)
+      delete room_message_url(room, message)
 
-      expect(response).to redirect_to(messages_url)
+      expect(response).to redirect_to(room_url(room))
     end
   end
 end

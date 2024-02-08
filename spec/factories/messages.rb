@@ -5,5 +5,6 @@ FactoryBot.define do
     content { 'Some text' }
 
     association :user
+    association :room
   end
 end
