@@ -9,17 +9,24 @@ class MessagesController < ApplicationController
   def edit; end
 
   def create
-    @message = @room.messages.create!(message_params.merge(user_id: current_user.id))
+    @message = @room.messages.new(message_params.merge(user_id: current_user.id))
 
     respond_to do |format|
-      format.html { redirect_to @room }
+      if @message.save
+        format.html { redirect_to @room }
+      else
+        format.html { redirect_to @room, alert: @message.errors.full_messages.join(', ') }
+      end
     end
   end
 
   def update
-    @message.update(message_params)
     respond_to do |format|
-      format.html { redirect_to @room }
+      if @message.update(message_params)
+        format.html { redirect_to @room }
+      else
+        format.html { render :edit, alert: @message.errors.full_messages.join(', ') }
+      end
     end
   end
 
