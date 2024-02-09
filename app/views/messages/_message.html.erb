@@ -15,7 +15,8 @@
     <%= message.user.email %>
   </p>
 
-  <%= link_to "Edit this message", edit_room_message_path(message.room, message) %> |
-  <%= button_to "Destroy this message", room_message_path(message.room, message), method: :delete %>
-
+  <% if message_belongs_to_current_user?(message) %>
+    <%= link_to "Edit this message", edit_room_message_path(message.room, message) %> |
+    <%= button_to "Destroy this message", room_message_path(message.room, message), method: :delete %>
+  <% end %>
 </div>
