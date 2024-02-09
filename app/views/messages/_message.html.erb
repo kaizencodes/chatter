@@ -16,12 +16,10 @@
           </p>
         </div>
 
-      <% if message_belongs_to_current_user?(message) %>
-        <div class="btn-group p-3" role="group" aria-label="Basic example">
-          <%= button_to "Edit this message", edit_room_message_path(message.room, message), method: :get, class: 'btn btn-light' %>
-          <%= button_to "Destroy this message", room_message_path(message.room, message), method: :delete, class: 'btn btn-light' %>
-        </div>
-      <% end %>
+      <div class="btn-group p-3" role="group" aria-label="Basic example">
+        <%= button_to "Edit this message", edit_room_message_path(message.room, message), method: :get, class: 'btn btn-light' %>
+        <%= button_to "Destroy this message", room_message_path(message.room, message), method: :delete, class: 'btn btn-light' %>
+      </div>
     </div>
   </div>
 </div>
