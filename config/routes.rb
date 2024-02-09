@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  resources :rooms, only: [:show] do
+  resources :rooms, only: [:show, :index, :new, :create] do
     resources :messages, except: [:show, :index]
   end
   devise_for :users
@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   get 'up' => 'rails/health#show', as: :rails_health_check
 
   # Defines the root path route ("/")
-  root to: 'rooms#show'
+  root to: 'rooms#index'
 
-  get '/', to: 'rooms#show'
+  get '/', to: 'rooms#index'
 end
