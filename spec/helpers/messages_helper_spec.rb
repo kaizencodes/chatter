@@ -2,16 +2,29 @@
 
 require 'rails_helper'
 
-# Specs in this file have access to a helper object that includes
-# the MessagesHelper. For example:
-#
-# describe MessagesHelper do
-#   describe "string concat" do
-#     it "concats two strings with spaces" do
-#       expect(helper.concat_strings("this","that")).to eq("this that")
-#     end
-#   end
-# end
 RSpec.describe MessagesHelper, type: :helper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe '#message_belongs_to_current_user?' do
+    let(:user) { create(:user) }
+    let(:message) { create(:message, user:) }
+
+    context 'when the message belongs to the current user' do
+      before do
+        allow(helper).to receive(:current_user).and_return(user)
+      end
+
+      it 'returns true' do
+        expect(helper.message_belongs_to_current_user?(message)).to eq(true)
+      end
+    end
+
+    context 'when the message does not belong to the current user' do
+      before do
+        allow(helper).to receive(:current_user).and_return(create(:user))
+      end
+
+      it 'returns false' do
+        expect(helper.message_belongs_to_current_user?(message)).to eq(false)
+      end
+    end
+  end
 end
