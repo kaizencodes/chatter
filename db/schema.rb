@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_08_132242) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_09_111214) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -24,11 +24,22 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_08_132242) do
     t.index ["user_id"], name: "index_messages_on_user_id"
   end
 
+  create_table "room_users", force: :cascade do |t|
+    t.bigint "room_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["room_id"], name: "index_room_users_on_room_id"
+    t.index ["user_id"], name: "index_room_users_on_user_id"
+  end
+
   create_table "rooms", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "owner_id"
     t.index ["name"], name: "index_rooms_on_name", unique: true
+    t.index ["owner_id"], name: "index_rooms_on_owner_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -45,4 +56,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_08_132242) do
 
   add_foreign_key "messages", "rooms"
   add_foreign_key "messages", "users"
+  add_foreign_key "room_users", "rooms"
+  add_foreign_key "room_users", "users"
+  add_foreign_key "rooms", "users", column: "owner_id"
 end

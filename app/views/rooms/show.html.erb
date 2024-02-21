@@ -13,5 +13,28 @@
     <%= render @room.messages %>
   </div>
 
+  <%= form_with(model: @room, url: add_member_room_url(@room), method: :post) do |form| %>
+  <% if @room.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(@room.errors.count, "error") %> prohibited this room from being saved:</h2>
+
+      <ul>
+        <% @room.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label "Add new member", class: "form-label" %>
+    <%= form.select :user_id, User.where.not(id: [@room.members.ids + [@room.owner_id]]).pluck(:email, :id) %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.submit 'Send', class: "btn btn-primary" %>
+  </div>
+<% end %>
+
   <%= render "messages/form", message: Message.new(room: @room)  %>
 </div>

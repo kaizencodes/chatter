@@ -2,6 +2,9 @@
 
 Rails.application.routes.draw do
   resources :rooms, only: [:show, :index, :new, :create] do
+    member do
+      post :add_member
+    end
     resources :messages, except: [:show, :index]
   end
   devise_for :users
